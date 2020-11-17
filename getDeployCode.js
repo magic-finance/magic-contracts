@@ -128,7 +128,7 @@ const deployMAGICToken = async (mnemonic = "", mainnet = false) => {
 
 }
 
-const deployMaigcVault = (magicTokenAddress = "0x62359ed7505efc61ff1d56fef82158ccaffa23d7") => {
+const deployMagicVault = (magicTokenAddress = "0x62359ed7505efc61ff1d56fef82158ccaffa23d7") => {
     let magicVaultUnpacked = unpackArtifact("./artifacts/FeeApprover.json")
 }
 
