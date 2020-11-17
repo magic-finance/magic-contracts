@@ -1,0 +1,10 @@
+/node_modules
+/build
+/cache
+/artifacts
+.DS_Store
+/artifacts
+secrets
+yarn-error.log
+contracts.orig
+Proxy/node_modules
