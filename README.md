@@ -1,10 +1,10 @@
 # Introducing MAGIC
 
-MAGIC is a non-inflationary cryptocurrency designed for stable DeFi.
+MAGIC is a non-inflationary cryptocurrency designed for stable DeFi on Binance Smart Chain.
 
 # Initial Distribution
 
-The MAGIC team is kickstarting the initial distribution with a liquidity event. Contribute ETH to the MAGIC liquidity generation event smart contract to receive tokens, and the contributed ETH will be matched and added to the Uniswap liquidity pool. Note that once added, liquidity tokens can not be removed from the MAGIC Uniswap LP pools. This is by design. Read on to learn about why..
+The MAGIC team is kickstarting the initial distribution with a liquidity event. Contribute BNB to the MAGIC liquidity generation event smart contract to receive tokens, and the contributed BNB will be matched and added to the PancakeSwap liquidity pool. Note that once added, liquidity tokens can not be removed from the MAGIC PancakeSwap LP pools. This is by design. Read on to learn about why..
 
 # **Deflationary Farming**
 
