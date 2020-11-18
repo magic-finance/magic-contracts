@@ -18,6 +18,7 @@
     "@uniswap/lib": "^1.1.4",
     "@uniswap/v2-core": "^1.0.1",
     "truffle": "^5.1.41",
+    "truffle-assertions": "^0.9.2",
     "truffle-flattener": "^1.4.4",
     "truffle-ledger-provider": "https://github.com/UMAprotocol/truffle-ledger-provider"
   },

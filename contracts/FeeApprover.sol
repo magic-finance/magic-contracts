@@ -14,12 +14,12 @@ contract FeeApprover is OwnableUpgradeSafe {
     function initialize(
         address _MAGICAddress,
         address _WETHAddress,
-        address _uniswapFactory
+        address _MagicPair
     ) public initializer {
         OwnableUpgradeSafe.__Ownable_init();
         magicTokenAddress = _MAGICAddress;
         WETHAddress = _WETHAddress;
-        tokenUniswapPair = IUniswapV2Factory(_uniswapFactory).getPair(WETHAddress,magicTokenAddress);
+        tokenUniswapPair = _MagicPair;
         feePercentX100 = 10;
         paused = true; // We start paused until sync post LGE happens.
         _editNoFeeList(0xC5cacb708425961594B63eC171f4df27a9c0d8c9, true); // magicvault proxy

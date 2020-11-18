@@ -6,7 +6,6 @@ const UniswapV2Pair = artifacts.require('UniswapV2Pair');
 const UniswapV2Factory = artifacts.require('UniswapV2Factory');
 const FeeApprover = artifacts.require('FeeApprover');
 const UniswapV2Router02 = artifacts.require('UniswapV2Router02');
-const MerlinFactory = artifacts.require('MerlinFactory');
 
 contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean, clean2, clean3, clean4, clean5]) => {
 

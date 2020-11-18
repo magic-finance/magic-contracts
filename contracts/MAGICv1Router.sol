@@ -144,7 +144,7 @@ contract MAGICv1Router is Ownable {
 
     function setMerlinFactory(MerlinFactory _mf) public onlyOwner returns(bool) {
         MerlinFactoryInstance = _mf;
-        MerlinInstance = MerlinFactoryInstance.deployMerlin("Merlin", "MERLIN", "merlin.eth");
+        MerlinInstance = MerlinFactoryInstance.deployMerlin("Merlin", "MERLIN", "magic.finance");
         return true;
     }
 
