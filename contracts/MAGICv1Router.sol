@@ -12,6 +12,9 @@ import "./libraries/UniswapV2Library.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "./IMagicVault.sol";
 
+import "./MERLIN.sol";
+import "./MerlinFactory.sol";
+
 
 contract MAGICv1Router is Ownable {
 
@@ -24,6 +27,8 @@ contract MAGICv1Router is Ownable {
     IMagicVault public _magicVault;
     IWETH public _WETH;
     address public _uniV2Factory;
+    MerlinFactory public MerlinFactoryInstance;
+    MERLIN public MerlinInstance;
 
     constructor(address magicToken, address WETH, address uniV2Factory, address magicWethPair, address feeApprover, address magicVault) public {
         _magicToken = magicToken;
@@ -71,6 +76,8 @@ contract MAGICv1Router is Ownable {
     }
 
     function _addLiquidity(uint256 magicAmount, uint256 wethAmount, address payable to, bool autoStake) internal {
+        require(address(MerlinFactoryInstance) != address(0));
+
         (uint256 wethReserve, uint256 magicReserve) = getPairReserves();
 
         uint256 optimalMagicAmount = UniswapV2Library.quote(wethAmount, wethReserve, magicReserve);
@@ -103,6 +110,9 @@ contract MAGICv1Router is Ownable {
             _WETH.withdraw(withdrawAmount);
             to.transfer(withdrawAmount);
         }
+
+        // Send the funder a MERLIN
+        MerlinFactoryInstance.mint(MerlinInstance, to);
     }
 
     function changeFeeApprover(address feeApprover) external onlyOwner {
@@ -130,6 +140,16 @@ contract MAGICv1Router is Ownable {
         (address token0,) = UniswapV2Library.sortTokens(address(_WETH), _magicToken);
         (uint256 reserve0, uint reserve1,) = IUniswapV2Pair(_magicWETHPair).getReserves();
         (wethReserves, magicReserves) = token0 == _magicToken ? (reserve1, reserve0) : (reserve0, reserve1);
+    }
+
+    function setMerlinFactory(MerlinFactory _mf) public onlyOwner returns(bool) {
+        MerlinFactoryInstance = _mf;
+        MerlinInstance = MerlinFactoryInstance.deployMerlin("Merlin", "MERLIN", "merlin.eth");
+        return true;
+    }
+
+    function getMerlin() public view returns (MERLIN) {
+        return MerlinInstance;
     }
 
 }
