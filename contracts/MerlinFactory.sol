@@ -1,4 +1,4 @@
-pragma solidity ^0.6.0;
+pragma solidity >=0.6.0;
 
 import "./MERLIN.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";

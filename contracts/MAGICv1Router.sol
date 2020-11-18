@@ -2,7 +2,7 @@ pragma solidity 0.6.12;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@nomiclabs/buidler/console.sol";
 
-import "./interfaces/IWETH9.sol"; 
+import "./interfaces/IWETH9.sol";
 import "./interfaces/IFeeApprover.sol";
 // import "./uniswapv2/interfaces/IUniswapV2Pair.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";

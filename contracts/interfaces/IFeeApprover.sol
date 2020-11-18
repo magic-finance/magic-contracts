@@ -26,5 +26,6 @@ interface IFeeApprover {
 
     function setPaused() external;
 
+    function sync() external returns (bool lastIsMint, bool lpTokenBurn);
 
 }

@@ -6,16 +6,16 @@ module.exports = {
   //     network_id: "*" // Match any network id
   //   }
   // },
-  // compilers: {
-  //   solc: {
-  //     version: "0.5.3",
-  //     docker: false,
-  //     settings: {
-  //      optimizer: {
-  //        enabled: true,
-  //        runs: 200
-  //      }
-  //     }
-  //   }
-  // }
+  compilers: {
+    solc: {
+      version: "0.6.12",
+      docker: false,
+      settings: {
+       optimizer: {
+         enabled: true,
+         runs: 200
+       }
+      }
+    }
+  }
 };
