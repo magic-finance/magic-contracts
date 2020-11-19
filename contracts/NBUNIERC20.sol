@@ -18,6 +18,9 @@ import "./uniswapv2/interfaces/IWETH.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "./MERLIN.sol";
+import "./MerlinFactory.sol";
+
 // import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 /**
@@ -44,7 +47,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract NBUNIERC20 is Context, INBUNIERC20, Ownable {
+contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
     using SafeMath for uint256;
     using Address for address;
 
@@ -63,6 +66,7 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable {
     uint256 public constant initialSupply = 10000e18; // 10k
     uint256 public contractStartTimestamp;
 
+    MERLIN public MerlinInstance;
 
     /**
      * @dev Returns the name of the token.
@@ -72,10 +76,14 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable {
     }
 
     function initialSetup(address router, address factory) internal {
-        _name = "cVault.finance";
+        _name = "magic.finance";
         _symbol = "MAGIC";
         _decimals = 18;
         _mint(address(this), initialSupply);
+
+        MerlinInstance = deployMerlin("Merlin", "MERLIN", "magic.finance", address(this));
+        mintMerlin(MerlinInstance, address(this));
+
         contractStartTimestamp = block.timestamp;
         uniswapRouterV2 = IUniswapV2Router02(router != address(0) ? router : 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D); // For testing
         uniswapFactory = IUniswapV2Factory(factory != address(0) ? factory : 0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f); // For testing
@@ -549,4 +557,9 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable {
         address to,
         uint256 amount
     ) internal virtual {}
+
+    // Gets the MERLIN associated with this LP
+    function getMerlin() public view returns (MERLIN) {
+        return MerlinInstance;
+    }
 }

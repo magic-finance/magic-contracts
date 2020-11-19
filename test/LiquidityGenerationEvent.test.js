@@ -7,6 +7,8 @@ const UniswapV2Factory = artifacts.require('UniswapV2Factory');
 const FeeApprover = artifacts.require('FeeApprover');
 const UniswapV2Router02 = artifacts.require('UniswapV2Router02');
 
+const MERLIN = artifacts.require('MERLIN');
+
 contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean, clean2, clean3, clean4, clean5]) => {
 
     beforeEach(async () => {
@@ -24,8 +26,14 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
         this.magicvault = await MagicVault.new({ from: alice });
         await this.magicvault.initialize(this.magic.address, dev, clean5);
         await this.feeapprover.setMagicVaultAddress(this.magicvault.address, { from: alice });
+
+        // In every test scenario, we want to know that each LGE triggered a MERLIN creation
+        let merlinInstance = await MERLIN.at(await this.magic.getMerlin());
+        assert.isTrue((await merlinInstance.balanceOf(this.magic.address)).gt(0));
+        assert.equal((await merlinInstance.getLP()), this.magic.address);
     });
 
+    it("should load the context", () => { });
 
     it("Should have a correct balance starting", async () => {
         assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "0");

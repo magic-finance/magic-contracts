@@ -1,48 +1,39 @@
 pragma solidity >=0.6.0;
 
 import "./MERLIN.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract MerlinFactory is Ownable() {
+contract MerlinFactory {
 
     address[] public contracts;
     address public lastContractAddress;
-    address public bondedContract;
 
     mapping(address => bool) public ownedContracts;
 
     event deployedMerlin (
         address indexed addr,
-        string indexed name,
+        string name,
         string indexed symbol,
-        string tokenURI
+        string tokenURI,
+        address indexed LP
     );
-
-    function bondContract(address _a) public onlyOwner returns(bool) {
-        bondedContract = _a;
-        return true;
-    }
 
     function getContractCount() public view returns(uint contractCount) {
       return contracts.length;
     }
 
-    function deployMerlin(string memory name, string memory symbol, string memory tokenURI) public returns(MERLIN newContract) {
-      require(msg.sender == owner() || msg.sender == bondedContract, "Only the owner or bonded contract can deploy new MERLINs");
-
-      MERLIN c = new MERLIN(name, symbol, tokenURI);
+    function deployMerlin(string memory name, string memory symbol, string memory tokenURI, address LP) internal returns(MERLIN newContract) {
+      MERLIN c = new MERLIN(name, symbol, tokenURI, LP);
       address cAddr = address(c);
       contracts.push(cAddr);
       lastContractAddress = cAddr;
 
       ownedContracts[cAddr] = true;
 
-      emit deployedMerlin(cAddr, name, symbol, tokenURI);
+      emit deployedMerlin(cAddr, name, symbol, tokenURI, LP);
 
       return c;
     }
-    function mint(MERLIN _merlin, address recipient) public {
-      require(msg.sender == bondedContract, "Only the bonded contract can mint MERLINs");
+    function mintMerlin(MERLIN _merlin, address recipient) internal {
       _merlin.mint(recipient);
     }
 }

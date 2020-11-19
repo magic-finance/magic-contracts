@@ -25,4 +25,8 @@ Theres absolutely no way to create new MAGIC tokens. This means the circulating 
 ## Testing
 
 To run the tests run
-``` npx buidler test ```
+```
+npx buidler test
+```
+
+Increase your ganache accounts to 12, default balance to 1000000, and block gas limit to 672197500000
