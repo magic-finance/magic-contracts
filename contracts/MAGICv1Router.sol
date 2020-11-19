@@ -5,7 +5,7 @@ import "@nomiclabs/buidler/console.sol";
 import "./interfaces/IWETH9.sol";
 import "./interfaces/IFeeApprover.sol";
 // import "./uniswapv2/interfaces/IUniswapV2Pair.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
 import './libraries/Math.sol';
 
 import "./libraries/UniswapV2Library.sol";
@@ -84,7 +84,7 @@ contract MAGICv1Router is Ownable {
             optimalWETHAmount = wethAmount;
 
         assert(_WETH.transfer(_magicWETHPair, optimalWETHAmount));
-        assert(IERC20(_magicToken).transfer(_magicWETHPair, optimalMagicAmount));
+        assert(IBEP20(_magicToken).transfer(_magicWETHPair, optimalMagicAmount));
 
         if (autoStake) {
             IUniswapV2Pair(_magicWETHPair).mint(address(this));
@@ -96,7 +96,7 @@ contract MAGICv1Router is Ownable {
 
         //refund dust
         if (magicAmount > optimalMagicAmount)
-            IERC20(_magicToken).transfer(to, magicAmount.sub(optimalMagicAmount));
+            IBEP20(_magicToken).transfer(to, magicAmount.sub(optimalMagicAmount));
 
         if (wethAmount > optimalWETHAmount) {
             uint256 withdrawAmount = wethAmount.sub(optimalWETHAmount);

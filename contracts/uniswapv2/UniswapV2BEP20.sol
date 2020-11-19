@@ -3,7 +3,7 @@ pragma solidity >=0.6.12;
 import './libraries/SafeMath.sol';
 import "@nomiclabs/buidler/console.sol";
 
-contract UniswapV2ERC20 {
+contract UniswapV2BEP20 {
     using SafeMathUniswap for uint;
 
     string public constant name = ' LP Token';

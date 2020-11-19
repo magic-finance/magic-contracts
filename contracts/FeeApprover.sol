@@ -3,7 +3,7 @@
 pragma solidity ^0.6.0;
 import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol"; // for WETH
+import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
 import "@nomiclabs/buidler/console.sol";
 import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Factory.sol';
 import "@openzeppelin/contracts-ethereum-package/contracts/Initializable.sol";
@@ -71,12 +71,12 @@ contract FeeApprover is OwnableUpgradeSafe {
 
         // This will update the state of lastIsMint, when called publically
         // So we have to sync it before to the last LP token value.
-        uint256 _LPSupplyOfPairTotal = IERC20(tokenUniswapPair).totalSupply();
+        uint256 _LPSupplyOfPairTotal = IBEP20(tokenUniswapPair).totalSupply();
         lpTokenBurn = lastTotalSupplyOfLPTokens > _LPSupplyOfPairTotal;
         lastTotalSupplyOfLPTokens = _LPSupplyOfPairTotal;
 
-        uint256 _balanceWETH = IERC20(WETHAddress).balanceOf(tokenUniswapPair);
-        uint256 _balanceMAGIC = IERC20(magicTokenAddress).balanceOf(tokenUniswapPair);
+        uint256 _balanceWETH = IBEP20(WETHAddress).balanceOf(tokenUniswapPair);
+        uint256 _balanceMAGIC = IBEP20(magicTokenAddress).balanceOf(tokenUniswapPair);
 
         // Do not block after small liq additions
         // you can only withdraw 350$ now with front running

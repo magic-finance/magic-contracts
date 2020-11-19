@@ -3,14 +3,14 @@
 pragma solidity ^0.6.0;
 
 import "@openzeppelin/contracts/GSN/Context.sol";
-import "./INBUNIERC20.sol";
+import "./INBUNIBEP20.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "./interfaces/IFeeApprover.sol";
 import "./IMagicVault.sol";
 import "@nomiclabs/buidler/console.sol";
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol"; // for WETH
+import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
 import "./uniswapv2/interfaces/IUniswapV2Factory.sol"; // interface factorys
 import "./uniswapv2/interfaces/IUniswapV2Router02.sol"; // interface factorys
 import '@uniswap/v2-core/contracts/interfaces/IUniswapV2Pair.sol';
@@ -47,7 +47,7 @@ import "./MerlinFactory.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
+contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, MerlinFactory {
     using SafeMath for uint256;
     using Address for address;
 
@@ -326,7 +326,7 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
             _msgSender(),
             _allowances[sender][_msgSender()].sub(
                 amount,
-                "ERC20: transfer amount exceeds allowance"
+                "BEP20: transfer amount exceeds allowance"
             )
         );
         return true;
@@ -381,7 +381,7 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
             spender,
             _allowances[_msgSender()][spender].sub(
                 subtractedValue,
-                "ERC20: decreased allowance below zero"
+                "BEP20: decreased allowance below zero"
             )
         );
         return true;
@@ -427,8 +427,8 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
         address recipient,
         uint256 amount
     ) internal virtual {
-        require(sender != address(0), "ERC20: transfer from the zero address");
-        require(recipient != address(0), "ERC20: transfer to the zero address");
+        require(sender != address(0), "BEP20: transfer from the zero address");
+        require(recipient != address(0), "BEP20: transfer to the zero address");
 
 
 
@@ -436,7 +436,7 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
 
         _balances[sender] = _balances[sender].sub(
             amount,
-            "ERC20: transfer amount exceeds balance"
+            "BEP20: transfer amount exceeds balance"
         );
 
         (uint256 transferToAmount, uint256 transferToFeeDistributorAmount) = IFeeApprover(transferCheckerAddress).calculateAmountsAfterFee(sender, recipient, amount);
@@ -469,7 +469,7 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
      * - `to` cannot be the zero address.
      */
     function _mint(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: mint to the zero address");
+        require(account != address(0), "BEP20: mint to the zero address");
 
         _beforeTokenTransfer(address(0), account, amount);
 
@@ -490,13 +490,13 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
      * - `account` must have at least `amount` tokens.
      */
     function _burn(address account, uint256 amount) internal virtual {
-        require(account != address(0), "ERC20: burn from the zero address");
+        require(account != address(0), "BEP20: burn from the zero address");
 
         _beforeTokenTransfer(account, address(0), amount);
 
         _balances[account] = _balances[account].sub(
             amount,
-            "ERC20: burn amount exceeds balance"
+            "BEP20: burn amount exceeds balance"
         );
         _totalSupply = _totalSupply.sub(amount);
         emit Transfer(account, address(0), amount);
@@ -520,8 +520,8 @@ contract NBUNIERC20 is Context, INBUNIERC20, Ownable, MerlinFactory {
         address spender,
         uint256 amount
     ) internal virtual {
-        require(owner != address(0), "ERC20: approve from the zero address");
-        require(spender != address(0), "ERC20: approve to the zero address");
+        require(owner != address(0), "BEP20: approve from the zero address");
+        require(spender != address(0), "BEP20: approve to the zero address");
 
         _allowances[owner][spender] = amount;
         emit Approval(owner, spender, amount);

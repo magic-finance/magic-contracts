@@ -1,11 +1,11 @@
 pragma solidity 0.6.12;
 
 
-import "./NBUNIERC20.sol";
+import "./NBUNIBEP20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 // MagicToken with Governance.
-contract MAGIC is NBUNIERC20 {
+contract MAGIC is NBUNIBEP20 {
 
 
         /**

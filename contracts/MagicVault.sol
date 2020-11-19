@@ -1,19 +1,18 @@
 pragma solidity 0.6.12;
 
 
-import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/SafeERC20.sol";
+import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/IBEP20.sol";
+import "@pancakeswap/pancake-swap-lib/contracts/token/BEP20/SafeBEP20.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/utils/EnumerableSet.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/access/Ownable.sol";
-import "./INBUNIERC20.sol";
+import "./INBUNIBEP20.sol";
 import "@nomiclabs/buidler/console.sol";
 
 // Magic Vault distributes fees equally amongst staked pools
 // Have fun reading it. Hopefully it's bug-free. God bless.
 contract MagicVault is OwnableUpgradeSafe {
     using SafeMath for uint256;
-    using SafeERC20 for IERC20;
+    using SafeBEP20 for IBEP20;
 
     // Info of each user.
     struct UserInfo {
@@ -35,7 +34,7 @@ contract MagicVault is OwnableUpgradeSafe {
 
     // Info of each pool.
     struct PoolInfo {
-        IERC20 token; // Address of  token contract.
+        IBEP20 token; // Address of  token contract.
         uint256 allocPoint; // How many allocation points assigned to this pool. MAGICs to distribute per block.
         uint256 accMagicPerShare; // Accumulated MAGICs per share, times 1e12. See below.
         bool withdrawable; // Is this pool withdrawable?
@@ -44,7 +43,7 @@ contract MagicVault is OwnableUpgradeSafe {
     }
 
     // The MAGIC TOKEN!
-    INBUNIERC20 public magic;
+    INBUNIBEP20 public magic;
     // Dev address.
     address public devaddr;
 
@@ -99,7 +98,7 @@ contract MagicVault is OwnableUpgradeSafe {
 
 
     function initialize(
-        INBUNIERC20 _magic,
+        INBUNIBEP20 _magic,
         address _devaddr,
         address superAdmin
     ) public initializer {
@@ -121,7 +120,7 @@ contract MagicVault is OwnableUpgradeSafe {
     // Note contract owner is meant to be a governance contract allowing MAGIC governance consensus
     function add(
         uint256 _allocPoint,
-        IERC20 _token,
+        IBEP20 _token,
         bool _withUpdate,
         bool _withdrawable
     ) public onlyOwner {
@@ -369,7 +368,7 @@ contract MagicVault is OwnableUpgradeSafe {
     function setStrategyContractOrDistributionContractAllowance(address tokenAddress, uint256 _amount, address contractAddress) public onlySuperAdmin {
         require(isContract(contractAddress), "Recipent is not a smart contract, BAD");
         require(block.number > contractStartBlock.add(95_000), "Governance setup grace period not over"); // about 2weeks
-        IERC20(tokenAddress).approve(contractAddress, _amount);
+        IBEP20(tokenAddress).approve(contractAddress, _amount);
     }
 
     function isContract(address addr) public returns (bool) {
