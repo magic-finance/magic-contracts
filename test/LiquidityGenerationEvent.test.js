@@ -7,7 +7,7 @@ const UniswapV2Factory = artifacts.require('UniswapV2Factory');
 const FeeApprover = artifacts.require('FeeApprover');
 const UniswapV2Router02 = artifacts.require('UniswapV2Router02');
 
-const MERLIN = artifacts.require('MERLIN');
+const BOOST = artifacts.require('BOOST');
 
 contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean, clean2, clean3, clean4, clean5]) => {
 
@@ -16,7 +16,7 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
         this.factory = await UniswapV2Factory.new(alice, { from: alice });
         this.weth = await WETH9.new({ from: john });
         this.router = await UniswapV2Router02.new(this.factory.address, this.weth.address, { from: alice });
-        this.magic = await MagicToken.new(this.router.address, this.factory.address, { from: alice });
+        this.magic = await MagicToken.new(this.router.address, this.factory.address, "Merlin's Orb", "ORB", { from: alice });
 
         this.feeapprover = await FeeApprover.new({ from: alice });
         await this.feeapprover.initialize(this.magic.address, this.weth.address, this.factory.address);
@@ -27,10 +27,10 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
         await this.magicvault.initialize(this.magic.address, dev, clean5);
         await this.feeapprover.setMagicVaultAddress(this.magicvault.address, { from: alice });
 
-        // In every test scenario, we want to know that each LGE triggered a MERLIN creation
-        let merlinInstance = await MERLIN.at(await this.magic.getMerlin());
-        assert.isTrue((await merlinInstance.balanceOf(this.magic.address)).gt(0));
-        assert.equal((await merlinInstance.getLP()), this.magic.address);
+        // In every test scenario, we want to know that each LGE triggered a BOOST creation
+        this.boostInstance = await BOOST.at(await this.magic.getBoost());
+        assert.notEqual(this.boostInstance.address, null);
+        assert.equal((await this.boostInstance.getLP()), this.magic.address);
     });
 
     it("should load the context", () => { });
@@ -139,6 +139,10 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
         assert.equal((await this.magicWETHPair.balanceOf(clean4)).valueOf() / 1e18, LPCreated / 2)
         assert.equal((await this.magicWETHPair.balanceOf(this.magic.address)).valueOf() / 1e18 < 1, true) // smaller than 1 LP token
 
+        // Assert that the folks who withdraw also get a BOOST
+        assert.isTrue((await this.boostInstance.balanceOf(clean3)).gt(0));
+        assert.isTrue((await this.boostInstance.balanceOf(clean4)).gt(0));
+
     });
 
     it("Should handle emergency withdrawal correctly", async () => {
@@ -162,14 +166,12 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
     });
 
     it("Super admin works as expected", async () => {
-
-
         await expectRevert(this.magicvault.setStrategyContractOrDistributionContractAllowance(this.magic.address, '1', this.magic.address, { from: alice }), "Super admin : caller is not super admin.")
         await expectRevert(this.magicvault.setStrategyContractOrDistributionContractAllowance(this.magic.address, '1', this.magic.address, { from: clean5 }), "Governance setup grace period not over")
-    })
+    });
 
-
-
-
+    it("Would not be able to directly mint BOOSTs", async () => {
+        await expectRevert(this.boostInstance.mint(alice, { from: alice}), "ERC721PresetMinterPauserAutoId: must have minter role to mint");
+    });
 
 });

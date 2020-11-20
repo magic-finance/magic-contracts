@@ -2,7 +2,7 @@ pragma solidity >=0.6.0;
 
 import "@openzeppelin/contracts/presets/ERC721PresetMinterPauserAutoId.sol";
 
-contract MERLIN is ERC721PresetMinterPauserAutoId {
+contract BOOST is ERC721PresetMinterPauserAutoId {
 
   // The LGE that generated this MERLIN
   address public LP;

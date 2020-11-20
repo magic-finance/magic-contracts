@@ -16,7 +16,7 @@ contract('MagicToken', ([alice, john, minter, dev, burner, clean, clean2, clean3
         this.weth = await WETH9.new({ from: john });
         await this.weth.deposit({ from: alice, value: '1000000000000000000000' })
         this.router = await UniswapV2Router02.new(this.factory.address, this.weth.address, { from: alice });
-        this.magic = await MagicToken.new(this.router.address, this.factory.address, { from: alice });
+        this.magic = await MagicToken.new(this.router.address, this.factory.address, "Merlin's Orb", "ORB", { from: alice });
         this.magicWETHPair = await UniswapV2Pair.at(await this.factory.getPair(this.weth.address, this.magic.address));
 
 

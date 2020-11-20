@@ -6,8 +6,8 @@ import "@nomiclabs/buidler/console.sol";
 contract UniswapV2BEP20 {
     using SafeMathUniswap for uint;
 
-    string public constant name = ' LP Token';
-    string public constant symbol = 'LP';
+    string public constant name = ' Merlin Token';
+    string public constant symbol = 'MERLIN';
     uint8 public constant decimals = 18;
     uint  public totalSupply;
     mapping(address => uint) public balanceOf;

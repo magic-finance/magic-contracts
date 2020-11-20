@@ -18,8 +18,8 @@ import "./uniswapv2/interfaces/IWETH.sol";
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-import "./MERLIN.sol";
-import "./MerlinFactory.sol";
+import "./BOOST.sol";
+import "./BoostFactory.sol";
 
 // import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
@@ -47,7 +47,7 @@ import "./MerlinFactory.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, MerlinFactory {
+contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, BoostFactory {
     using SafeMath for uint256;
     using Address for address;
 
@@ -66,7 +66,7 @@ contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, MerlinFactory {
     uint256 public constant initialSupply = 10000e18; // 10k
     uint256 public contractStartTimestamp;
 
-    MERLIN public MerlinInstance;
+    BOOST public BoostInstance;
 
     /**
      * @dev Returns the name of the token.
@@ -75,14 +75,13 @@ contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, MerlinFactory {
         return _name;
     }
 
-    function initialSetup(address router, address factory) internal {
+    function initialSetup(address router, address factory, string memory boostName, string memory boostSymbol) internal {
         _name = "magic.finance";
         _symbol = "MAGIC";
         _decimals = 18;
         _mint(address(this), initialSupply);
 
-        MerlinInstance = deployMerlin("Merlin", "MERLIN", "magic.finance", address(this));
-        mintMerlin(MerlinInstance, address(this));
+        BoostInstance = deployBoost(boostName, boostSymbol, "magic.finance", address(this));
 
         contractStartTimestamp = block.timestamp;
         uniswapRouterV2 = IUniswapV2Router02(router != address(0) ? router : 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D); // For testing
@@ -251,6 +250,7 @@ contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, MerlinFactory {
         uint256 amountLPToTransfer = ethContributed[msg.sender].mul(LPperETHUnit).div(1e18);
         pair.transfer(msg.sender, amountLPToTransfer); // stored as 1e18x value for change
         ethContributed[msg.sender] = 0;
+        mintBoost(BoostInstance, msg.sender);
         emit LPTokenClaimed(msg.sender, amountLPToTransfer);
     }
 
@@ -558,8 +558,8 @@ contract NBUNIBEP20 is Context, INBUNIBEP20, Ownable, MerlinFactory {
         uint256 amount
     ) internal virtual {}
 
-    // Gets the MERLIN associated with this LP
-    function getMerlin() public view returns (MERLIN) {
-        return MerlinInstance;
+    // Gets the BOOST associated with this LP
+    function getBoost() public view returns (BOOST) {
+        return BoostInstance;
     }
 }

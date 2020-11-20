@@ -17,9 +17,9 @@ contract MAGIC is NBUNIBEP20 {
      * All three of these values are immutable: they can only be set once during
      * construction.
      */
-    constructor(address router, address factory) public {
+    constructor(address router, address factory, string memory boostName, string memory boostSymbol) public {
 
-        initialSetup(router, factory);
+        initialSetup(router, factory, boostName, boostSymbol);
         // _name = name;
         // _symbol = symbol;
         // _decimals = 18;

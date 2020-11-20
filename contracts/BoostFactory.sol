@@ -1,15 +1,15 @@
 pragma solidity >=0.6.0;
 
-import "./MERLIN.sol";
+import "./BOOST.sol";
 
-contract MerlinFactory {
+contract BoostFactory {
 
     address[] public contracts;
     address public lastContractAddress;
 
     mapping(address => bool) public ownedContracts;
 
-    event deployedMerlin (
+    event deployedBoost (
         address indexed addr,
         string name,
         string indexed symbol,
@@ -21,19 +21,19 @@ contract MerlinFactory {
       return contracts.length;
     }
 
-    function deployMerlin(string memory name, string memory symbol, string memory tokenURI, address LP) internal returns(MERLIN newContract) {
-      MERLIN c = new MERLIN(name, symbol, tokenURI, LP);
+    function deployBoost(string memory name, string memory symbol, string memory tokenURI, address LP) internal returns(BOOST newContract) {
+      BOOST c = new BOOST(name, symbol, tokenURI, LP);
       address cAddr = address(c);
       contracts.push(cAddr);
       lastContractAddress = cAddr;
 
       ownedContracts[cAddr] = true;
 
-      emit deployedMerlin(cAddr, name, symbol, tokenURI, LP);
+      emit deployedBoost(cAddr, name, symbol, tokenURI, LP);
 
       return c;
     }
-    function mintMerlin(MERLIN _merlin, address recipient) internal {
-      _merlin.mint(recipient);
+    function mintBoost(BOOST _boost, address recipient) internal {
+      _boost.mint(recipient);
     }
 }
