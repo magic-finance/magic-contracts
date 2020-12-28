@@ -84,9 +84,9 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
     it("Should create the pair liquidity with lots of eth", async () => {
         assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "0");
         assert.equal((await this.magic.balanceOf(this.magic.address)).valueOf().toString(), 10000e18);
-        await this.magic.addLiquidity(true, { from: clean, value: '9899998457311999999700' });
-        assert.equal((await this.magic.ethContributed(clean)).valueOf().toString(), '9899998457311999999700');
-        assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "9899998457311999999700");
+        await this.magic.addLiquidity(true, { from: clean, value: '9998457311999999700' });
+        assert.equal((await this.magic.ethContributed(clean)).valueOf().toString(), '9998457311999999700');
+        assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "9998457311999999700");
         await time.increase(60 * 60 * 24 * 7 + 1);
         this.magicWETHPair = await UniswapV2Pair.at(await this.factory.getPair(this.weth.address, this.magic.address));
         await this.magic.addLiquidityToUniswapMAGICxWETHPair();
@@ -98,9 +98,9 @@ contract('Liquidity Generation tests', ([alice, john, minter, dev, burner, clean
     it("Should give out LP tokens up to 1 LP value precision", async () => {
         assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "0");
         assert.equal((await this.magic.balanceOf(this.magic.address)).valueOf().toString(), 10000e18);
-        await this.magic.addLiquidity(true, { from: clean2, value: '9899998457311999999700' });
-        assert.equal((await this.magic.ethContributed(clean2)).valueOf().toString(), '9899998457311999999700');
-        assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "9899998457311999999700");
+        await this.magic.addLiquidity(true, { from: clean2, value: '9998457311999999700' });
+        assert.equal((await this.magic.ethContributed(clean2)).valueOf().toString(), '9998457311999999700');
+        assert.equal((await web3.eth.getBalance(this.magic.address)).valueOf().toString(), "9998457311999999700");
         await time.increase(60 * 60 * 24 * 7 + 1);
         this.magicWETHPair = await UniswapV2Pair.at(await this.factory.getPair(this.weth.address, this.magic.address));
         await this.magic.addLiquidityToUniswapMAGICxWETHPair();
